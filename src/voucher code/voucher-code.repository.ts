@@ -44,6 +44,6 @@ export class VoucherCodeRepo {
   }
 
   async findByCode(code: string) {
-    return await this.voucherCodeRepository.findOne({ where: { code }, relations: ["customer"] });
+    return await this.voucherCodeRepository.findOne({ where: { code }, relations: ["customer", "specialOffer"] });
   }
 }

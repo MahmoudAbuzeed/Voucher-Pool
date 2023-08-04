@@ -71,24 +71,18 @@ export class VoucherCodeService {
 
   async validateVoucher(validateVoucherCodeDto: ValidateVoucherCodeDto) {
     const voucherCode = await this.voucherCodeRepo.findByCode(validateVoucherCodeDto.code);
-    console.log({ voucherCode });
     if (!voucherCode) throw this.errorHandler.notFound();
     if (voucherCode.customer.email != validateVoucherCodeDto.customer_email) {
       throw this.errorHandler.invalidVoucherCode();
     }
-    console.log("EHEHEHEHEHEHEHEEH");
 
     if (voucherCode.expired_at < new Date()) throw this.errorHandler.expiredVoucherCode();
-    console.log("SSSSSSSSS");
 
-    await this.voucherCodeRepo.updateByEmail(validateVoucherCodeDto.customer_email, {
+    await this.voucherCodeRepo.update(voucherCode.id, {
       used: true,
       used_at: new Date(),
     });
-    console.log("RRRRRRRRRRRR");
 
-    const specialOffer = await this.specialOfferService.getOneByMail(voucherCode.customer.email);
-
-    return specialOffer;
+    return voucherCode;
   }
 }
