@@ -20,10 +20,9 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle("NestJS Example App")
+    .setTitle("Voucher Pool App")
     .setDescription("The description of the API")
     .setVersion("1.0")
-    .addTag("nestjs")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
