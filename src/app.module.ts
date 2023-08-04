@@ -1,17 +1,17 @@
 import { Module, Global, MiddlewareConsumer } from "@nestjs/common";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import { join } from "path";
 
+import { LoggerMiddleware } from "shared/logger/logger.middleware";
+import { Logger } from "shared/logger/logger.service";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-
-import { modules } from "./modules";
 import { entities } from "./entities";
-import { join } from "path";
-import { ServeStaticModule } from "@nestjs/serve-static";
-import { JwtService } from "@nestjs/jwt";
-import { Logger } from "shared/logger/logger.service";
-import { LoggerMiddleware } from "shared/logger/logger.middleware";
+import { modules } from "./modules";
+import { IsEmailAlreadyExistConstraint } from "shared/custom-decorators/unique-email.decorator";
 
 @Global()
 @Module({
@@ -34,7 +34,7 @@ import { LoggerMiddleware } from "shared/logger/logger.middleware";
     ...modules,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService, Logger],
+  providers: [AppService, JwtService, Logger ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

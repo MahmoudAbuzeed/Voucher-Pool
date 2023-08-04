@@ -11,8 +11,6 @@ export class CustomerService {
   constructor(private readonly customerRepo: CustomerRepo, private readonly errorHandler: ErrorHandler) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
-    console.log({ createCustomerDto });
-
     try {
       await this.customerRepo.create(createCustomerDto);
       return { message: CREATED_SUCCESSFULLY };
@@ -45,5 +43,9 @@ export class CustomerService {
     const deletedCustomer = await this.customerRepo.remove(+id);
     if (deletedCustomer.affected == 0) throw this.errorHandler.notFound();
     return { message: DELETED_SUCCESSFULLY };
+  }
+
+  async getOneByMail(email: string) {
+    return await this.customerRepo.findByMail(email);
   }
 }

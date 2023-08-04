@@ -33,4 +33,8 @@ export class CustomerRepo {
   async remove(id: number) {
     return await this.customerRepository.delete({ id });
   }
+
+  async findByMail(email: string) {
+    return await this.customerRepository.findOne({ where: { email } });
+  }
 }
