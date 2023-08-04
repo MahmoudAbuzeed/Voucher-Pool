@@ -34,7 +34,7 @@ import { IsEmailAlreadyExistConstraint } from "shared/custom-decorators/unique-e
     ...modules,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService, Logger ],
+  providers: [AppService, JwtService, Logger],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
