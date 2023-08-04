@@ -8,7 +8,7 @@ import { UpdateCustomerDto } from "./dto/update-customer.dto";
 import { Customer } from "./entities/customer.entity";
 
 @Injectable()
-export class CustomerRepo {
+export class CustomerRepository {
   constructor(
     @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,

@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
 import { Customer } from "src/customer/entities/customer.entity";
+import { SpecialOffer } from "src/special offer/entities/special-offer.entity";
 
 @Entity()
 export class VoucherCode {
@@ -26,4 +27,7 @@ export class VoucherCode {
 
   @ManyToOne(() => Customer, (customer) => customer.voucherCodes)
   customer: Customer;
+
+  @ManyToOne(() => SpecialOffer, (specialOffer) => specialOffer.voucherCodes)
+  specialOffer: SpecialOffer;
 }

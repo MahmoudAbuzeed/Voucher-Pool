@@ -1,10 +1,11 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateSpecialOfferDto {
+export class ValidateVoucherCodeDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  customer_email: string;
 
+  @IsString()
   @IsNotEmpty()
-  fixed_percentage_discount: number;
+  code: string;
 }

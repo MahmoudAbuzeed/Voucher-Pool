@@ -4,11 +4,11 @@ import { Injectable } from "@nestjs/common";
 import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { UpdateCustomerDto } from "./dto/update-customer.dto";
 import { ErrorHandler } from "shared/errorHandler.service";
-import { CustomerRepo } from "./customer.repository";
+import { CustomerRepository } from "./customer.repository";
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepo: CustomerRepo, private readonly errorHandler: ErrorHandler) {}
+  constructor(private readonly customerRepo: CustomerRepository, private readonly errorHandler: ErrorHandler) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
     try {
@@ -47,5 +47,11 @@ export class CustomerService {
 
   async getOneByMail(email: string) {
     return await this.customerRepo.findByMail(email);
+  }
+
+  async findOneByEmail(email: string) {
+    const customer = await this.customerRepo.findByMail(email);
+    if (!customer) throw this.errorHandler.notFound();
+    return customer;
   }
 }

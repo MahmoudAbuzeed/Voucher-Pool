@@ -6,29 +6,39 @@ import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
 import { ErrorHandler } from "shared/errorHandler.service";
 import { VoucherCodeRepo } from "./voucher-code.repository";
 import { ulid } from "ulid";
+import { ValidateVoucherCodeDto } from "./dto/validate-voucher-code.dto";
+import { CustomerService } from "src/customer/customer.service";
+import { SpecialOfferService } from "src/Special Offer/special-offer.service";
+import { VoucherCode } from "./entities/voucher-code.entity";
 
 @Injectable()
 export class VoucherCodeService {
-  constructor(private readonly voucherCodeRepo: VoucherCodeRepo, private readonly errorHandler: ErrorHandler) {}
+  constructor(
+    private readonly voucherCodeRepo: VoucherCodeRepo,
+    private readonly customerService: CustomerService,
+    private readonly specialOfferService: SpecialOfferService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   async create(createVoucherCodeDto: CreateVoucherCodeDto) {
-    try {
-      createVoucherCodeDto.code = ulid();
-      createVoucherCodeDto.expired_at = new Date();
-      createVoucherCodeDto.expired_at.setDate(createVoucherCodeDto.expired_at.getDate() + 3);
-      await this.voucherCodeRepo.create(createVoucherCodeDto);
-      return { message: CREATED_SUCCESSFULLY };
-    } catch (error) {
-      throw this.errorHandler.badRequest(error);
-    }
+    const customer = await this.customerService.findOneByEmail(createVoucherCodeDto.customer_email);
+
+    const specialOffer = await this.specialOfferService.findOne(createVoucherCodeDto.special_offer_id);
+
+    const voucherCode = new VoucherCode();
+    voucherCode.code = ulid();
+    voucherCode.expired_at = new Date();
+    voucherCode.expired_at.setDate(voucherCode.expired_at.getDate() + 3);
+    voucherCode.used_at = null;
+    voucherCode.customer = customer;
+    voucherCode.specialOffer = specialOffer;
+
+    await this.voucherCodeRepo.create(voucherCode);
+    return { message: CREATED_SUCCESSFULLY };
   }
 
   async findAll() {
-    try {
-      return await this.voucherCodeRepo.findAll();
-    } catch (error) {
-      throw this.errorHandler.badRequest(error);
-    }
+    return await this.voucherCodeRepo.findAll();
   }
 
   async findOne(id: number) {
@@ -57,5 +67,28 @@ export class VoucherCodeService {
 
   async getOneByMail(email: string) {
     return await this.voucherCodeRepo.findByMail(email);
+  }
+
+  async validateVoucher(validateVoucherCodeDto: ValidateVoucherCodeDto) {
+    const voucherCode = await this.voucherCodeRepo.findByCode(validateVoucherCodeDto.code);
+    console.log({ voucherCode });
+    if (!voucherCode) throw this.errorHandler.notFound();
+    if (voucherCode.customer.email != validateVoucherCodeDto.customer_email) {
+      throw this.errorHandler.invalidVoucherCode();
+    }
+    console.log("EHEHEHEHEHEHEHEEH");
+
+    if (voucherCode.expired_at < new Date()) throw this.errorHandler.expiredVoucherCode();
+    console.log("SSSSSSSSS");
+
+    await this.voucherCodeRepo.updateByEmail(validateVoucherCodeDto.customer_email, {
+      used: true,
+      used_at: new Date(),
+    });
+    console.log("RRRRRRRRRRRR");
+
+    const specialOffer = await this.specialOfferService.getOneByMail(voucherCode.customer.email);
+
+    return specialOffer;
   }
 }

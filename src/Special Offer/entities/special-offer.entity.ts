@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { VoucherCode } from "src/voucher code/entities/voucher-code.entity";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 
 @Entity()
 export class SpecialOffer {
@@ -9,11 +10,14 @@ export class SpecialOffer {
   name: string;
 
   @Column()
-  fixed_percentage_discount: string;
+  fixed_percentage_discount: number;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => VoucherCode, (voucherCode) => voucherCode.specialOffer)
+  voucherCodes: VoucherCode[];
 }

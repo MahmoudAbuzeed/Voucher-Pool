@@ -6,6 +6,7 @@ import { CreateVoucherCodeDto } from "./dto/create-voucher-code.dto";
 import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
 
 import { VoucherCode } from "./entities/voucher-code.entity";
+import { Customer } from "src/customer/entities/customer.entity";
 
 @Injectable()
 export class VoucherCodeRepo {
@@ -14,8 +15,8 @@ export class VoucherCodeRepo {
     private voucherCodeRepository: Repository<VoucherCode>,
   ) {}
 
-  async create(createVoucherCodeDto: CreateVoucherCodeDto) {
-    return await this.voucherCodeRepository.save(createVoucherCodeDto);
+  async create(voucherCode: VoucherCode) {
+    return await this.voucherCodeRepository.save(voucherCode);
   }
 
   async findAll() {
@@ -40,5 +41,9 @@ export class VoucherCodeRepo {
 
   async findByMail(email: string) {
     return await this.voucherCodeRepository.findOne({ where: { email } });
+  }
+
+  async findByCode(code: string) {
+    return await this.voucherCodeRepository.findOne({ where: { code }, relations: ["customer"] });
   }
 }

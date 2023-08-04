@@ -1,14 +1,8 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 
 @Injectable()
 export class ErrorHandler {
-  notFound(error: any = { message: 'Not Found' }) {
+  notFound(error: any = { message: "Not Found" }) {
     throw new NotFoundException(error);
   }
 
@@ -19,23 +13,28 @@ export class ErrorHandler {
   duplicateValue(error: any) {
     throw new BadRequestException({
       statusCode: 400,
-      error: 'Bad Request',
-      message: 'Some fields are invalid',
+      error: "Bad Request",
+      message: "Some fields are invalid",
     });
   }
 
   didNotMatch() {
     throw new BadRequestException({
       statusCode: 400,
-      error: 'Bad Request',
-      message: 'Password did not match',
+      error: "Bad Request",
+      message: "Password did not match",
     });
   }
 
   invalidCredentials() {
-    throw new HttpException(
-      'Wrong credentials provided',
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new HttpException("Wrong credentials provided", HttpStatus.BAD_REQUEST);
+  }
+
+  invalidVoucherCode() {
+    throw new HttpException("Invalid voucher code", HttpStatus.BAD_REQUEST);
+  }
+
+  expiredVoucherCode() {
+    throw new HttpException("Expired voucher code", HttpStatus.BAD_REQUEST);
   }
 }

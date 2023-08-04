@@ -11,5 +11,6 @@ import { ErrorHandler } from "shared/errorHandler.service";
   imports: [TypeOrmModule.forFeature([SpecialOffer])],
   controllers: [SpecialOfferController],
   providers: [SpecialOfferService, SpecialOfferRepo, ErrorHandler],
+  exports: [TypeOrmModule],
 })
 export class SpecialOfferModule {}
