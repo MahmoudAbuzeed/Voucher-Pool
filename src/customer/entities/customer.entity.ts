@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { VoucherCode } from "src/voucher code/entities/voucher-code.entity";
 
 @Entity()
 export class Customer {
@@ -16,4 +17,7 @@ export class Customer {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => VoucherCode, (voucherCode) => voucherCode.customer)
+  voucherCodes: VoucherCode[];
 }
