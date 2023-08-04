@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { join } from "path";
 
 @Injectable()
 export class AppService {
   getHello(): string {
-    return join(__dirname, "..", "uploadedFiles");
+    return "Hello From Voucher Pool API!";
   }
 }

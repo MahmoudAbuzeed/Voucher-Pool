@@ -1,5 +1,7 @@
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+
 import { AppModule } from "./app.module";
 import { Logger } from "shared/logger/logger.service";
 
@@ -14,9 +16,18 @@ async function bootstrap() {
     new ValidationPipe({
       skipMissingProperties: false,
       whitelist: true,
-      // forbidNonWhitelisted: process.env.NODE_ENV === 'development',
     }),
   );
+
+  const config = new DocumentBuilder()
+    .setTitle("NestJS Example App")
+    .setDescription("The description of the API")
+    .setVersion("1.0")
+    .addTag("nestjs")
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("api", app, document);
 
   await app.listen(3002);
 }
