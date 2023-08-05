@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 
 import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
 import { VoucherCode } from "./entities/voucher-code.entity";
+import { CustomError } from "shared/custom-error/custom-error";
 
 @Injectable()
 export class VoucherCodeRepo {
@@ -25,7 +26,10 @@ export class VoucherCodeRepo {
   }
 
   async update(id: number, updateVoucherCodeDto: UpdateVoucherCodeDto) {
-    return await this.voucherCodeRepository.update(id, updateVoucherCodeDto);
+    this.voucherCodeRepository.manager.transaction(async (transactionalEntityManager) => {
+      const result = await transactionalEntityManager.update(VoucherCode, { id, used: false }, updateVoucherCodeDto);
+      if (result.affected === 0) throw new CustomError(400, "Voucher code has expired!");
+    });
   }
 
   async updateByEmail(customer: string, updateVoucherCodeDto: UpdateVoucherCodeDto) {

@@ -77,8 +77,7 @@ export class VoucherCodeService {
   }
 
   async update(id: number, updateVoucherCodeDto: UpdateVoucherCodeDto) {
-    const updatedVoucherCode = await this.voucherCodeRepo.update(id, updateVoucherCodeDto);
-    if (updatedVoucherCode.affected == 0) throw new CustomError(404, "Voucher code not found!");
+    await this.voucherCodeRepo.update(id, updateVoucherCodeDto);
     return { message: UPDATED_SUCCESSFULLY };
   }
 
