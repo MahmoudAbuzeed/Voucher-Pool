@@ -1,32 +1,60 @@
-version: '3'
-services:
-  mysqldb:
-    image: mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: voucher_pool
-    volumes: 
-      - db-config:/etc/mysql
-      - db-data:/var/lib/mysql
-      - ./db/backup/files/:/data_backup/data
+version: "1"
 
-  nest-app:
+services:
+  nginx:
+    container_name: nginx
     build:
       context: .
-      dockerfile: ./Dockerfile
-    image: node-mysql-app
-    ports:
-      - 3002:3002
-    volumes:
-      - ./:/app
-      - /app/node_modules
+      dockerfile: ./docker/nginx.development.dockerfile
     depends_on:
-      - mysqldb
-    stdin_open: true
-    tty: true
+      - voucher
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - voucher-network
 
+  voucher:
+    container_name: Voucher-Service
+    build:
+      context: .
+      dockerfile: ./docker/voucher.node.development.dockerfile
+    ports:
+      - "3010:3010"
+    volumes:
+      - .:/var/www/voucher
+    depends_on:
+      - voucherdb
+    networks:
+      voucher-network:
+        ipv4_address: 172.28.0.14
+        aliases:
+          - voucher.local
 
-volumes: 
-  db-config:
-  db-data:
+  voucherdb:
+    container_name: voucherdb
+    restart: always
+    image: mysql:latest
+    volumes:
+      - "mysql:/var/lib/mysql"
+      - "./config/mysql/sql.cnf:/etc/mysql/conf.d/sql.cnf"
+    ports:
+      - "3367:3306"
+    env_file:
+      - ./docker/env/voucherdb.development.env
+    networks:
+      voucher-network:
+        ipv4_address: 172.28.0.15
+        aliases:
+          - voucherdb.local
+
+volumes:
+  mysql:
+  servers:
+
+networks:
+  voucher-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
