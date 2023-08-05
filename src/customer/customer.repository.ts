@@ -2,7 +2,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 
-import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { UpdateCustomerDto } from "./dto/update-customer.dto";
 
 import { Customer } from "./entities/customer.entity";
@@ -14,8 +13,8 @@ export class CustomerRepository {
     private customerRepository: Repository<Customer>,
   ) {}
 
-  async create(createCustomerDto: CreateCustomerDto) {
-    return await this.customerRepository.save(createCustomerDto);
+  async create(customer: Customer) {
+    return await this.customerRepository.save(customer);
   }
 
   async findAll() {

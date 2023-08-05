@@ -1,35 +1,57 @@
 import { CREATED_SUCCESSFULLY, DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "messages";
 import { Injectable } from "@nestjs/common";
 
+import { validateMailRegex } from "shared/constants/validations";
+import { CustomError } from "shared/custom-error/custom-error";
 import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { UpdateCustomerDto } from "./dto/update-customer.dto";
 import { ErrorHandler } from "shared/errorHandler.service";
 import { CustomerRepository } from "./customer.repository";
+import { Customer } from "./entities/customer.entity";
 
 @Injectable()
 export class CustomerService {
   constructor(private readonly customerRepo: CustomerRepository, private readonly errorHandler: ErrorHandler) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
-    try {
-      await this.customerRepo.create(createCustomerDto);
-      return { message: CREATED_SUCCESSFULLY };
-    } catch (error) {
-      throw this.errorHandler.badRequest(error);
+    this.validateCustomerEmail(createCustomerDto.email);
+    const customer = this.buildCustomer(createCustomerDto);
+    await this.checkIfCustomerExists(customer.email);
+
+    const newCustomer = await this.customerRepo.create(customer);
+    if (!newCustomer) throw new CustomError(400, "Something went wrong!");
+    return { message: CREATED_SUCCESSFULLY };
+  }
+
+  private buildCustomer(createCustomerDto: CreateCustomerDto): Customer {
+    const customer = new Customer();
+    customer.email = createCustomerDto.email;
+    customer.name = createCustomerDto.name;
+    return customer;
+  }
+
+  private async checkIfCustomerExists(email: string) {
+    const existingCustomer = await this.customerRepo.findByMail(email);
+    if (existingCustomer) throw new CustomError(400, "Customer already exists!");
+  }
+
+  private validateCustomerEmail(email: string) {
+    if (!email || !this.isValidEmail(email)) {
+      throw new CustomError(400, "Invalid email address!");
     }
   }
 
+  private isValidEmail(email: string): boolean {
+    return validateMailRegex.test(String(email).toLowerCase());
+  }
+
   async findAll() {
-    try {
-      return await this.customerRepo.findAll();
-    } catch (error) {
-      throw this.errorHandler.badRequest(error);
-    }
+    return await this.customerRepo.findAll();
   }
 
   async findOne(id: number) {
     const customer = await this.customerRepo.findOne(id);
-    if (!customer) throw this.errorHandler.notFound();
+    if (!customer) throw new CustomError(404, "Customer not found!");
     return customer;
   }
 
@@ -51,7 +73,7 @@ export class CustomerService {
 
   async findOneByEmail(email: string) {
     const customer = await this.customerRepo.findByMail(email);
-    if (!customer) throw this.errorHandler.notFound();
+    if (!customer) throw new CustomError(404, "Customer not found!");
     return customer;
   }
 }
