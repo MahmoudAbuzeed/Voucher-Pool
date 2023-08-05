@@ -4,25 +4,32 @@ import { ApiTags } from "@nestjs/swagger";
 import { CreateSpecialOfferDto } from "./dto/create-special-offer.dto";
 import { UpdateSpecialOfferDto } from "./dto/update-special-offer.dto";
 import { SpecialOfferService } from "./special-offer.service";
+import { SpecialOfferMapper } from "./mappers/special-offer.mapper";
 
 @ApiTags("Special Offer")
 @Controller("special-offer")
 export class SpecialOfferController {
-  constructor(private readonly specialOfferService: SpecialOfferService) {}
+  constructor(
+    private readonly specialOfferService: SpecialOfferService,
+    private readonly specialOfferMapper: SpecialOfferMapper,
+  ) {}
 
   @Get()
-  findAll() {
-    return this.specialOfferService.findAll();
+  async findAll() {
+    const specialOffers = await this.specialOfferService.findAll();
+    return this.specialOfferMapper.mapSpecialOffers(specialOffers);
   }
 
   @Post()
-  create(@Body() createSpecialOfferDto: CreateSpecialOfferDto) {
-    return this.specialOfferService.create(createSpecialOfferDto);
+  async create(@Body() createSpecialOfferDto: CreateSpecialOfferDto) {
+    const specialOffer = await this.specialOfferService.create(createSpecialOfferDto);
+    return this.specialOfferMapper.mapSingleSpecialOffer(specialOffer);
   }
 
   @Get("/:specialOfferId")
-  findOne(@Param("specialOfferId") specialOfferId: string) {
-    return this.specialOfferService.findOne(+specialOfferId);
+  async findOne(@Param("specialOfferId") specialOfferId: string) {
+    const specialOffer = await this.specialOfferService.findOne(+specialOfferId);
+    return this.specialOfferMapper.mapSingleSpecialOffer(specialOffer);
   }
 
   @Patch("/:specialOfferId")
