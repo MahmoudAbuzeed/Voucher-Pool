@@ -26,7 +26,7 @@ export class VoucherCodeRepo {
   }
 
   async update(id: number, updateVoucherCodeDto: UpdateVoucherCodeDto) {
-    this.voucherCodeRepository.manager.transaction(async (transactionalEntityManager) => {
+    await this.voucherCodeRepository.manager.transaction(async (transactionalEntityManager) => {
       const result = await transactionalEntityManager.update(VoucherCode, { id, used: false }, updateVoucherCodeDto);
       if (result.affected === 0) throw new CustomError(400, "Voucher code has expired!");
     });

@@ -55,14 +55,15 @@ export class VoucherCodeService {
       throw new CustomError(400, "Voucher code does not belong to this customer!");
     }
 
+    if (voucherCode.used) throw new CustomError(400, "Voucher code has already been used!");
     if (voucherCode.expired_at < new Date()) throw new CustomError(400, "Voucher code has expired!");
 
-    const updatedVoucher = await this.voucherCodeRepo.save(voucherCode.id, {
-      ...voucherCode,
+    await this.voucherCodeRepo.update(voucherCode.id, {
       used: true,
       used_at: new Date(),
     });
 
+    const updatedVoucher = await this.voucherCodeRepo.findOne(voucherCode.id);
     return updatedVoucher;
   }
 

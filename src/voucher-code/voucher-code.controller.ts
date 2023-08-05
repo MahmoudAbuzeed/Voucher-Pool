@@ -37,7 +37,7 @@ export class voucherCodeController {
     const voucherCode = await this.voucherCodeService.validateVoucher(validateVoucherCodeDto);
     return this.voucherCodeMapper.mapSingleVoucher(voucherCode);
   }
-
+ 
   @Throttle(10, 60) // 10 requests per 60 seconds
   @Get("/:voucherCodeId")
   async findOne(@Param("voucherCodeId") voucherCodeId: string) {
