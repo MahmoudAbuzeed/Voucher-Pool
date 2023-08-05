@@ -57,6 +57,7 @@ we have setup Ratelimit Functionality for our Specific end Points we have also i
 ## Documentation
 
 Swagger API documentation is available at `localhost:3010/api`.
+![Swagger API](Swagger.png)
 
 ## Unit Tests
 
