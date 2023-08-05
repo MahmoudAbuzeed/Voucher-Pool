@@ -19,7 +19,7 @@ export class CustomerService {
 
     const newCustomer = await this.customerRepo.create(customer);
     if (!newCustomer) throw new CustomError(400, "Something went wrong!");
-    return { message: CREATED_SUCCESSFULLY };
+    return newCustomer;
   }
 
   private buildCustomer(createCustomerDto: CreateCustomerDto): Customer {
