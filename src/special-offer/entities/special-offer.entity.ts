@@ -1,4 +1,4 @@
-import { VoucherCode } from "src/voucher-code/entities/voucher-code.entity";
+import { VoucherCode } from "../../../src/voucher-code/entities/voucher-code.entity";
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 
 @Entity()

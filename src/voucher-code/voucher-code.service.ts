@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { CREATED_SUCCESSFULLY, DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "messages";
+import { DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "messages";
 import { Injectable } from "@nestjs/common";
 
-import { SpecialOffer } from "src/special-offer/entities/special-offer.entity";
-import { SpecialOfferService } from "src/special-offer/special-offer.service";
+import { SpecialOffer } from "../../src/special-offer/entities/special-offer.entity";
+import { SpecialOfferService } from "../../src/special-offer/special-offer.service";
 import { ValidateVoucherCodeDto } from "./dto/validate-voucher-code.dto";
 import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
 import { CreateVoucherCodeDto } from "./dto/create-voucher-code.dto";
-import { Customer } from "src/customer/entities/customer.entity";
-import { CustomerService } from "src/customer/customer.service";
+import { Customer } from "../../src/customer/entities/customer.entity";
+import { CustomerService } from "../../src/customer/customer.service";
 import { VoucherCode } from "./entities/voucher-code.entity";
 import { VoucherCodeRepo } from "./voucher-code.repository";
 import { CustomError } from "shared/custom-error/custom-error";

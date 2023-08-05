@@ -1,17 +1,16 @@
-import { CREATED_SUCCESSFULLY, DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "messages";
+import { CREATED_SUCCESSFULLY, DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "../../messages";
 import { Injectable } from "@nestjs/common";
 
-import { validateMailRegex } from "shared/constants/validations";
-import { CustomError } from "shared/custom-error/custom-error";
+import { validateMailRegex } from "../../shared/constants/validations";
+import { CustomError } from "../../shared/custom-error/custom-error";
 import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { UpdateCustomerDto } from "./dto/update-customer.dto";
-import { ErrorHandler } from "shared/errorHandler.service";
 import { CustomerRepository } from "./customer.repository";
 import { Customer } from "./entities/customer.entity";
 
 @Injectable()
 export class CustomerService {
-  constructor(private readonly customerRepo: CustomerRepository, private readonly errorHandler: ErrorHandler) {}
+  constructor(private readonly customerRepo: CustomerRepository) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
     this.validateCustomerEmail(createCustomerDto.email);
@@ -57,13 +56,13 @@ export class CustomerService {
 
   async update(id: number, updateCustomerDto: UpdateCustomerDto) {
     const updatedCustomer = await this.customerRepo.update(id, updateCustomerDto);
-    if (updatedCustomer.affected == 0) throw this.errorHandler.notFound();
+    if (updatedCustomer.affected == 0) throw new CustomError(404, "Customer not found!");
     return { message: UPDATED_SUCCESSFULLY };
   }
 
   async remove(id: number) {
     const deletedCustomer = await this.customerRepo.remove(+id);
-    if (deletedCustomer.affected == 0) throw this.errorHandler.notFound();
+    if (deletedCustomer.affected == 0) throw new CustomError(404, "Customer not found!");
     return { message: DELETED_SUCCESSFULLY };
   }
 

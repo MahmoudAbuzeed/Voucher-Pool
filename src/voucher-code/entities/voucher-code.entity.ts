@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
-import { Customer } from "src/customer/entities/customer.entity";
-import { SpecialOffer } from "src/special-offer/entities/special-offer.entity";
+import { Customer } from "../../../src/customer/entities/customer.entity";
+import { SpecialOffer } from "../../../src/special-offer/entities/special-offer.entity";
 
 @Entity()
 export class VoucherCode {

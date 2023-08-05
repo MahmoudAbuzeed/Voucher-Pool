@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { Customer } from "src/customer/entities/customer.entity";
+import { Customer } from "../../../src/customer/entities/customer.entity";
 
 export class CreateVoucherCodeDto {
   @IsString()
