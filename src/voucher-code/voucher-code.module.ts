@@ -13,6 +13,8 @@ import { SpecialOfferService } from "../../src/special-offer/special-offer.servi
 import { SpecialOfferRepo } from "../../src/special-offer/special-offer.repository";
 import { SpecialOfferModule } from "../../src/special-offer/special-offer.module";
 import { VoucherCodeMapper } from "./mappers/voucher-code.mapper";
+import { APP_GUARD } from "@nestjs/core";
+import { ThrottlerGuard } from "@nestjs/throttler";
 
 @Module({
   imports: [TypeOrmModule.forFeature([VoucherCode]), CustomerModule, SpecialOfferModule],
@@ -26,6 +28,10 @@ import { VoucherCodeMapper } from "./mappers/voucher-code.mapper";
     SpecialOfferService,
     SpecialOfferRepo,
     VoucherCodeMapper,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
   exports: [TypeOrmModule],
 })

@@ -1,5 +1,6 @@
 import { Module, Global, MiddlewareConsumer } from "@nestjs/common";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { ThrottlerModule } from "@nestjs/throttler";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -17,6 +18,10 @@ import { modules } from "./modules";
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "uploadedFiles"),
+    }),
+    ThrottlerModule.forRoot({
+      ttl: 60, // Time-to-live in seconds for the request counts.
+      limit: 5, // Limit for the number of requests within the TTL.
     }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
