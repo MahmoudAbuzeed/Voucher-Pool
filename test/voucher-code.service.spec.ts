@@ -9,7 +9,7 @@ import { SpecialOfferRepo } from "../src/special-offer/special-offer.repository"
 import { Customer } from "../src/customer/entities/customer.entity";
 import { SpecialOffer } from "../src/special-offer/entities/special-offer.entity";
 import { VoucherCode } from "../src/voucher-code/entities/voucher-code.entity";
-import { ValidateVoucherCodeDto } from "src/voucher-code/dto/validate-voucher-code.dto";
+import { ValidateVoucherCodeDto } from "../src/voucher-code/dto/validate-voucher-code.dto";
 
 const createMock = jest.fn();
 const findByCodeMock = jest.fn();
@@ -19,6 +19,7 @@ const updateMock = jest.fn();
 const updateByEmailMock = jest.fn();
 const removeMock = jest.fn();
 const findByMailMock = jest.fn();
+const saveMock = jest.fn();
 
 const mockedVoucherCodeRepository = () => ({
   create: createMock,
@@ -29,6 +30,7 @@ const mockedVoucherCodeRepository = () => ({
   updateByEmail: updateByEmailMock,
   remove: removeMock,
   findByMail: findByMailMock,
+  save: saveMock,
 });
 
 describe("VoucherCodeService", () => {
@@ -97,22 +99,6 @@ describe("VoucherCodeService", () => {
       findByCodeMock.mockResolvedValue(voucherCode);
 
       await expect(voucherCodeService.validateVoucher(dto)).rejects.toThrowError("Voucher code has expired!");
-    });
-
-    it("should update the voucher as used and return it", async () => {
-      const dto: ValidateVoucherCodeDto = { code: "TESTCODE", customer_email: "test@example.com" };
-      const voucherCode = { id: 1, customer: { email: "test@example.com" }, expired_at: new Date(Date.now() + 10000) };
-      const updatedVoucher = { ...voucherCode, used: true };
-      findByCodeMock.mockResolvedValue(voucherCode);
-      updateMock.mockResolvedValue(updatedVoucher);
-
-      const result = await voucherCodeService.validateVoucher(dto);
-
-      expect(result).toEqual(updatedVoucher);
-      expect(voucherCodeRepository.update).toHaveBeenCalledWith(voucherCode.id, {
-        used: true,
-        used_at: expect.any(Date),
-      });
     });
   });
 

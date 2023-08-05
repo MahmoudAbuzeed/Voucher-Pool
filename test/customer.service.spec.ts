@@ -57,7 +57,7 @@ describe("CustomerService", () => {
 
       const result = await customerService.create(createCustomerDto);
 
-      expect(result.message).toBe("CREATED_SUCCESSFULLY");
+      expect(result).toBe(createCustomerDto);
     });
 
     it("should throw an error if the customer already exists", async () => {

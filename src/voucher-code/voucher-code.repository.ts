@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 
 import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
 import { VoucherCode } from "./entities/voucher-code.entity";
-import { CustomError } from "shared/custom-error/custom-error";
+import { CustomError } from "../../shared/custom-error/custom-error";
 
 @Injectable()
 export class VoucherCodeRepo {
