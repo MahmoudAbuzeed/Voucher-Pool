@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "messages";
+import { DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "../../messages";
 import { Injectable } from "@nestjs/common";
 
 import { SpecialOffer } from "../../src/special-offer/entities/special-offer.entity";
@@ -11,7 +11,7 @@ import { Customer } from "../../src/customer/entities/customer.entity";
 import { CustomerService } from "../../src/customer/customer.service";
 import { VoucherCode } from "./entities/voucher-code.entity";
 import { VoucherCodeRepo } from "./voucher-code.repository";
-import { CustomError } from "shared/custom-error/custom-error";
+import { CustomError } from "../../shared/custom-error/custom-error";
 const voucher_codes = require("voucher-code-generator");
 
 @Injectable()

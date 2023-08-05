@@ -1,10 +1,10 @@
-import { DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "messages";
+import { DELETED_SUCCESSFULLY, UPDATED_SUCCESSFULLY } from "../../messages";
 import { Injectable } from "@nestjs/common";
 
 import { CreateSpecialOfferDto } from "./dto/create-special-offer.dto";
 import { UpdateSpecialOfferDto } from "./dto/update-special-offer.dto";
 import { SpecialOfferRepo } from "./special-offer.repository";
-import { CustomError } from "shared/custom-error/custom-error";
+import { CustomError } from "../../shared/custom-error/custom-error";
 import { SpecialOffer } from "./entities/special-offer.entity";
 
 @Injectable()
