@@ -2,7 +2,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 
-import { CreateSpecialOfferDto } from "./dto/create-special-offer.dto";
 import { UpdateSpecialOfferDto } from "./dto/update-special-offer.dto";
 
 import { SpecialOffer } from "./entities/special-offer.entity";
@@ -14,8 +13,8 @@ export class SpecialOfferRepo {
     private specialOfferRepository: Repository<SpecialOffer>,
   ) {}
 
-  async create(createSpecialOfferDto: CreateSpecialOfferDto) {
-    return await this.specialOfferRepository.save(createSpecialOfferDto);
+  async create(specialOffer: SpecialOffer) {
+    return await this.specialOfferRepository.save(specialOffer);
   }
 
   async findAll() {
@@ -36,5 +35,9 @@ export class SpecialOfferRepo {
 
   async findByMail(email: string) {
     return await this.specialOfferRepository.findOne({ where: { email } });
+  }
+
+  async findByName(name: string) {
+    return await this.specialOfferRepository.findOne({ where: { name } });
   }
 }

@@ -9,9 +9,9 @@ import { VoucherCodeRepo } from "./voucher-code.repository";
 import { CustomerService } from "src/customer/customer.service";
 import { CustomerRepository } from "../customer/customer.repository";
 import { CustomerModule } from "src/customer/customer.module";
-import { SpecialOfferService } from "src/Special Offer/special-offer.service";
-import { SpecialOfferRepo } from "src/Special Offer/special-offer.repository";
-import { SpecialOfferModule } from "src/special offer/special-offer.module";
+import { SpecialOfferService } from "src/special-offer/special-offer.service";
+import { SpecialOfferRepo } from "src/special-offer/special-offer.repository";
+import { SpecialOfferModule } from "src/special-offer/special-offer.module";
 
 @Module({
   imports: [TypeOrmModule.forFeature([VoucherCode]), CustomerModule, SpecialOfferModule],

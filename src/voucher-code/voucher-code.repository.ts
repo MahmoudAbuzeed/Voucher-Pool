@@ -2,11 +2,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 
-import { CreateVoucherCodeDto } from "./dto/create-voucher-code.dto";
 import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
-
 import { VoucherCode } from "./entities/voucher-code.entity";
-import { Customer } from "src/customer/entities/customer.entity";
 
 @Injectable()
 export class VoucherCodeRepo {
