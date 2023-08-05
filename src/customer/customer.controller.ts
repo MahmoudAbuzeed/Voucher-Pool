@@ -14,7 +14,7 @@ export class CustomerController {
   @Get()
   async findAll() {
     const customers = await this.customerService.findAll();
-    return this.customerMapper.mapManyCustomers(customers);
+    return this.customerMapper.mapCustomers(customers);
   }
 
   @Post()

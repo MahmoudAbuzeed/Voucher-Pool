@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from "@nestjs/common";
-import { CustomerViewDto } from "../dtos/customer-view.dto";
+import { CustomerViewDto } from "../dto/customer-view.dto";
 
 @Injectable()
 export class CustomerMapper {
@@ -12,15 +12,7 @@ export class CustomerMapper {
     return customerDto;
   }
 
-  mapManyCustomers(customers): CustomerViewDto[] {
-    const mappedCustomers = customers.map((customer) => {
-      const customerDto = new CustomerViewDto();
-      customerDto.id = customer.id;
-      customerDto.name = customer.name;
-      customerDto.email = customer.email;
-      return customerDto;
-    });
-
-    return mappedCustomers;
+  mapCustomers(customers): CustomerViewDto[] {
+    return customers.map((customer) => this.mapSingleCustomer(customer));
   }
 }

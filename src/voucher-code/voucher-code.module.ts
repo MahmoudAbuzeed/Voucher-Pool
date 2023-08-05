@@ -12,6 +12,7 @@ import { CustomerModule } from "../../src/customer/customer.module";
 import { SpecialOfferService } from "../../src/special-offer/special-offer.service";
 import { SpecialOfferRepo } from "../../src/special-offer/special-offer.repository";
 import { SpecialOfferModule } from "../../src/special-offer/special-offer.module";
+import { VoucherCodeMapper } from "./mappers/voucher-code.mapper";
 
 @Module({
   imports: [TypeOrmModule.forFeature([VoucherCode]), CustomerModule, SpecialOfferModule],
@@ -24,6 +25,7 @@ import { SpecialOfferModule } from "../../src/special-offer/special-offer.module
     CustomerRepository,
     SpecialOfferService,
     SpecialOfferRepo,
+    VoucherCodeMapper,
   ],
   exports: [TypeOrmModule],
 })

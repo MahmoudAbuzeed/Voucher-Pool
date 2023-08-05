@@ -43,4 +43,8 @@ export class VoucherCodeRepo {
   async findByCode(code: string) {
     return await this.voucherCodeRepository.findOne({ where: { code }, relations: ["customer", "specialOffer"] });
   }
+
+  async save(id: number, updateVoucherCodeDto: UpdateVoucherCodeDto) {
+    return await this.voucherCodeRepository.save({ id, ...updateVoucherCodeDto });
+  }
 }

@@ -57,7 +57,8 @@ export class VoucherCodeService {
 
     if (voucherCode.expired_at < new Date()) throw new CustomError(400, "Voucher code has expired!");
 
-    const updatedVoucher = await this.voucherCodeRepo.update(voucherCode.id, {
+    const updatedVoucher = await this.voucherCodeRepo.save(voucherCode.id, {
+      ...voucherCode,
       used: true,
       used_at: new Date(),
     });

@@ -5,30 +5,38 @@ import { ValidateVoucherCodeDto } from "./dto/validate-voucher-code.dto";
 import { CreateVoucherCodeDto } from "./dto/create-voucher-code.dto";
 import { UpdateVoucherCodeDto } from "./dto/update-voucher-code.dto";
 import { VoucherCodeService } from "./voucher-code.service";
+import { VoucherCodeMapper } from "./mappers/voucher-code.mapper";
 
 @ApiTags("Voucher Code")
 @Controller("voucher-code")
 export class voucherCodeController {
-  constructor(private readonly voucherCodeService: VoucherCodeService) {}
+  constructor(
+    private readonly voucherCodeService: VoucherCodeService,
+    private readonly voucherCodeMapper: VoucherCodeMapper,
+  ) {}
 
   @Get()
-  findAll() {
-    return this.voucherCodeService.findAll();
+  async findAll() {
+    const vouchers = await this.voucherCodeService.findAll();
+    return this.voucherCodeMapper.mapVouchers(vouchers);
   }
 
   @Post()
-  create(@Body() createVoucherCodeDto: CreateVoucherCodeDto) {
-    return this.voucherCodeService.create(createVoucherCodeDto);
+  async create(@Body() createVoucherCodeDto: CreateVoucherCodeDto) {
+    const voucherCode = await this.voucherCodeService.create(createVoucherCodeDto);
+    return this.voucherCodeMapper.mapSingleVoucher(voucherCode);
   }
 
   @Post("/validate-voucher")
-  validateVoucher(@Body() validateVoucherCodeDto: ValidateVoucherCodeDto) {
-    return this.voucherCodeService.validateVoucher(validateVoucherCodeDto);
+  async validateVoucher(@Body() validateVoucherCodeDto: ValidateVoucherCodeDto) {
+    const voucherCode = await this.voucherCodeService.validateVoucher(validateVoucherCodeDto);
+    return this.voucherCodeMapper.mapSingleVoucher(voucherCode);
   }
 
   @Get("/:voucherCodeId")
-  findOne(@Param("voucherCodeId") voucherCodeId: string) {
-    return this.voucherCodeService.findOne(+voucherCodeId);
+  async findOne(@Param("voucherCodeId") voucherCodeId: string) {
+    const voucherCode = await this.voucherCodeService.findOne(+voucherCodeId);
+    return this.voucherCodeMapper.mapSingleVoucher(voucherCode);
   }
 
   @Patch()
