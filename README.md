@@ -51,7 +51,7 @@ we have setup Ratelimit Functionality for our Specific end Points we have also i
 
 3. Run Unit Tests (Optional):
    
-    npm test
+    npm run test
    
 
 ## Documentation
